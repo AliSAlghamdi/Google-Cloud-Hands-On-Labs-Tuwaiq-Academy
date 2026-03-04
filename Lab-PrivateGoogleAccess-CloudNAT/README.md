@@ -1,27 +1,26 @@
 # Lab – Implement Private Google Access and Cloud NAT
 
 ## Objective
-Learn how to allow a VM without a public IP address to access Google APIs and the internet securely using:
 
-- Private Google Access
-- Cloud NAT
-- Identity-Aware Proxy (IAP)
+Learn how to allow a VM without a public IP address to securely access Google APIs and the internet using:
+
+* Private Google Access
+* Cloud NAT
+* Identity-Aware Proxy (IAP)
 
 ---
 
 ## Architecture
 
-VM (No Public IP)  
-↓  
-Private Google Access → Access Google APIs  
-↓  
+VM (No Public IP)
+↓
+Private Google Access → Access Google APIs
+↓
 Cloud NAT → Access Internet
 
 ---
 
 # Steps
-
----
 
 ## 1️⃣ Create VPC Network
 
@@ -29,16 +28,17 @@ Create a custom VPC network called:
 
 privatenet
 
-Subnet:
+Create a subnet:
 
-privatenet-us  
-CIDR:
+privatenet-us
+
+CIDR range:
 
 10.130.0.0/20
 
 This network will host the internal VM used in this lab.
 
-<img width="1920" height="1080" alt="gc3" src="https://github.com/user-attachments/assets/ebabd60c-6cc1-4359-a3c5-477bf09f22dd" />
+![Create VPC Network](gc3.png)
 
 ---
 
@@ -46,17 +46,17 @@ This network will host the internal VM used in this lab.
 
 Create a firewall rule to allow SSH access using Google's IAP tunnel IP range.
 
-Allow:
+Allow source range:
 
 35.235.240.0/20
 
-Port:
+Allow port:
 
 tcp:22
 
 This allows secure SSH access to the internal VM through Identity-Aware Proxy.
 
-<img width="1920" height="1080" alt="gc4" src="https://github.com/user-attachments/assets/73130c14-93f0-4225-bb95-6e0b5e237166" />
+![Firewall Rule](gc4.png)
 
 ---
 
@@ -70,15 +70,15 @@ Important configuration:
 
 External IP = None
 
-This ensures the VM is **not directly accessible from the internet**.
+This ensures the VM is not directly accessible from the internet.
 
-<img width="1920" height="1080" alt="gc5" src="https://github.com/user-attachments/assets/811cd11b-eb6f-48b4-b139-58ce4443e2d5" />
+![VM Instance](gc5.png)
 
 ---
 
 ## 4️⃣ Connect to VM Using IAP Tunnel
 
-Use Cloud Shell to connect to the VM through IAP:
+Use Cloud Shell to connect to the VM using IAP:
 
 ```
 gcloud compute ssh vm-internal --zone europe-west1-c --tunnel-through-iap
@@ -86,13 +86,13 @@ gcloud compute ssh vm-internal --zone europe-west1-c --tunnel-through-iap
 
 This allows secure SSH access without requiring a public IP address.
 
-<img width="1920" height="1080" alt="gc6" src="https://github.com/user-attachments/assets/a81880d5-77a9-44ac-8494-140e39b3ef3b" />
+![IAP SSH Connection](gc6.png)
 
 ---
 
 ## 5️⃣ Enable Private Google Access
 
-Enable **Private Google Access** on the subnet.
+Enable Private Google Access on the subnet.
 
 Navigation:
 
@@ -102,9 +102,9 @@ Set:
 
 Private Google Access = ON
 
-This allows instances without public IPs to reach **Google APIs and services**.
+This allows instances without public IPs to reach Google APIs and services.
 
-<img width="1920" height="1080" alt="gc8" src="https://github.com/user-attachments/assets/ab25c958-021f-4ae5-9b11-7f59d9ec52f3" />
+![Private Google Access](gc8.png)
 
 ---
 
@@ -119,11 +119,15 @@ export MY_BUCKET=ali-bucket-v1
 gcloud storage cp gs://cloud-training/gcpnet/private/access.svg gs://$MY_BUCKET
 ```
 
-Then attempt to download the file.
+Then download the file:
 
-Successful transfer confirms access to **Google APIs through Private Google Access**.
+```
+gcloud storage cp gs://$MY_BUCKET/*.svg .
+```
 
-<img width="1920" height="1080" alt="gc7" src="https://github.com/user-attachments/assets/9ac948b2-5f81-49f3-ba7e-bc0691e2b090" />
+If the transfer succeeds, the VM can access Google APIs through Private Google Access.
+
+![Cloud Storage Test](gc7.png)
 
 ---
 
@@ -133,10 +137,10 @@ The VM successfully copied the file from the bucket.
 
 This confirms:
 
-- Private Google Access is working
-- The VM can access Google services without a public IP
+* Private Google Access is working
+* The VM can access Google services without a public IP
 
-<img width="1920" height="1080" alt="gc9" src="https://github.com/user-attachments/assets/d6633ddd-5a4b-449c-95da-27b808da4ef4" />
+![File Transfer Success](gc9.png)
 
 ---
 
@@ -162,9 +166,9 @@ Region:
 
 europe-west1
 
-This allows internal VMs to access the internet **without exposing them with public IPs**.
+This allows internal VMs to access the internet without exposing them with public IPs.
 
-<img width="1920" height="1080" alt="gc10" src="https://github.com/user-attachments/assets/058e8527-2e0f-4f77-ae19-936b742870ab" />
+![Cloud NAT](gc10.png)
 
 ---
 
@@ -172,8 +176,8 @@ This allows internal VMs to access the internet **without exposing them with pub
 
 The VM instance without an external IP can now:
 
-- Connect securely using **IAP**
-- Access **Google APIs and services** using Private Google Access
-- Access the **internet securely through Cloud NAT**
+* Connect securely using **Identity-Aware Proxy (IAP)**
+* Access **Google APIs** using **Private Google Access**
+* Access the **internet securely through Cloud NAT**
 
 This architecture improves security by preventing direct public exposure of VM instances.

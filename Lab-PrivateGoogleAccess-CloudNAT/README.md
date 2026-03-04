@@ -3,8 +3,8 @@
 ## Objective
 Learn how to allow a VM without a public IP address to access Google APIs and the internet securely using:
 
-- Private Google Access  
-- Cloud NAT  
+- Private Google Access
+- Cloud NAT
 - Identity-Aware Proxy (IAP)
 
 ---
@@ -19,26 +19,34 @@ Cloud NAT → Access Internet
 
 ---
 
-## Steps
+# Steps
 
-### 1️⃣ Create VPC Network
+---
 
-Create a VPC named:
+## 1️⃣ Create VPC Network
+
+Create a custom VPC network called:
 
 privatenet
 
 Subnet:
 
 privatenet-us  
-CIDR: 10.130.0.0/20
+CIDR:
 
-<img width="1920" height="1080" alt="gc1" src="https://github.com/user-attachments/assets/eaf7bd86-d8d4-4e7f-9c31-457b823e9259" />
+10.130.0.0/20
+
+This network will host the internal VM used in this lab.
+
+<img width="1920" height="1080" alt="gc3" src="https://github.com/user-attachments/assets/ebabd60c-6cc1-4359-a3c5-477bf09f22dd" />
 
 ---
 
-### 2️⃣ Create Firewall Rule
+## 2️⃣ Create Firewall Rule (Allow SSH via IAP)
 
-Allow SSH using IAP range:
+Create a firewall rule to allow SSH access using Google's IAP tunnel IP range.
+
+Allow:
 
 35.235.240.0/20
 
@@ -46,65 +54,99 @@ Port:
 
 tcp:22
 
-<img width="1920" height="1080" alt="gc2" src="https://github.com/user-attachments/assets/e97964f5-7502-4e81-be07-53c2ff02ed4a" />
-
-<img width="1920" height="1080" alt="gc3" src="https://github.com/user-attachments/assets/ebabd60c-6cc1-4359-a3c5-477bf09f22dd" />
-
----
-
-### 3️⃣ Create VM Without External IP
-
-VM name:
-
-vm-internal
-
-External IP:
-
-None
+This allows secure SSH access to the internal VM through Identity-Aware Proxy.
 
 <img width="1920" height="1080" alt="gc4" src="https://github.com/user-attachments/assets/73130c14-93f0-4225-bb95-6e0b5e237166" />
 
 ---
 
-### 4️⃣ Connect Using IAP
+## 3️⃣ Create VM Without External IP
 
-```
-gcloud compute ssh vm-internal --zone europe-west1-c --tunnel-through-iap
-```
+Create a VM instance named:
+
+vm-internal
+
+Important configuration:
+
+External IP = None
+
+This ensures the VM is **not directly accessible from the internet**.
 
 <img width="1920" height="1080" alt="gc5" src="https://github.com/user-attachments/assets/811cd11b-eb6f-48b4-b139-58ce4443e2d5" />
 
 ---
 
-### 5️⃣ Enable Private Google Access
+## 4️⃣ Connect to VM Using IAP Tunnel
 
-Go to:
+Use Cloud Shell to connect to the VM through IAP:
 
-VPC Network → Subnets → privatenet-us
+```
+gcloud compute ssh vm-internal --zone europe-west1-c --tunnel-through-iap
+```
 
-Enable:
-
-Private Google Access = ON
+This allows secure SSH access without requiring a public IP address.
 
 <img width="1920" height="1080" alt="gc6" src="https://github.com/user-attachments/assets/a81880d5-77a9-44ac-8494-140e39b3ef3b" />
 
 ---
 
-### 6️⃣ Test Access to Cloud Storage
+## 5️⃣ Enable Private Google Access
+
+Enable **Private Google Access** on the subnet.
+
+Navigation:
+
+VPC Network → Subnets → privatenet-us
+
+Set:
+
+Private Google Access = ON
+
+This allows instances without public IPs to reach **Google APIs and services**.
+
+<img width="1920" height="1080" alt="gc8" src="https://github.com/user-attachments/assets/ab25c958-021f-4ae5-9b11-7f59d9ec52f3" />
+
+---
+
+## 6️⃣ Test Private Google Access Using Cloud Storage
+
+Create a Cloud Storage bucket and copy a test file.
+
+Example commands:
 
 ```
+export MY_BUCKET=ali-bucket-v1
 gcloud storage cp gs://cloud-training/gcpnet/private/access.svg gs://$MY_BUCKET
 ```
+
+Then attempt to download the file.
+
+Successful transfer confirms access to **Google APIs through Private Google Access**.
 
 <img width="1920" height="1080" alt="gc7" src="https://github.com/user-attachments/assets/9ac948b2-5f81-49f3-ba7e-bc0691e2b090" />
 
 ---
 
-### 7️⃣ Configure Cloud NAT
+## 7️⃣ Verify File Transfer from Bucket
 
-Network services → Cloud NAT
+The VM successfully copied the file from the bucket.
 
-Create:
+This confirms:
+
+- Private Google Access is working
+- The VM can access Google services without a public IP
+
+<img width="1920" height="1080" alt="gc9" src="https://github.com/user-attachments/assets/d6633ddd-5a4b-449c-95da-27b808da4ef4" />
+
+---
+
+## 8️⃣ Configure Cloud NAT
+
+Create a Cloud NAT gateway.
+
+Configuration:
+
+Gateway name:
 
 nat-config
 
@@ -112,34 +154,26 @@ Router:
 
 nat-router
 
-<img width="1920" height="1080" alt="gc8" src="https://github.com/user-attachments/assets/ab25c958-021f-4ae5-9b11-7f59d9ec52f3" />
+Network:
 
----
+privatenet
 
-### 8️⃣ Test Internet Access
+Region:
 
-```
-sudo apt-get update
-```
+europe-west1
 
-If successful, the VM can access the internet through Cloud NAT.
-
-<img width="1920" height="1080" alt="gc9" src="https://github.com/user-attachments/assets/d6633ddd-5a4b-449c-95da-27b808da4ef4" />
-
----
-
-### 9️⃣ NAT Logs
-
-View NAT logs in **Logs Explorer**
+This allows internal VMs to access the internet **without exposing them with public IPs**.
 
 <img width="1920" height="1080" alt="gc10" src="https://github.com/user-attachments/assets/058e8527-2e0f-4f77-ae19-936b742870ab" />
 
 ---
 
-## Result
+# Result
 
-The VM instance without an external IP can:
+The VM instance without an external IP can now:
 
 - Connect securely using **IAP**
-- Access Google APIs using **Private Google Access**
-- Access the internet using **Cloud NAT**
+- Access **Google APIs and services** using Private Google Access
+- Access the **internet securely through Cloud NAT**
+
+This architecture improves security by preventing direct public exposure of VM instances.

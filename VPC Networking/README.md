@@ -49,7 +49,7 @@ Every Google Cloud project starts with a **default VPC network** that includes:
 
 Routes define how traffic moves inside the network and to the internet.
 
-![Routes](images/gc3_1.png)
+![Routes](gc3_1.png)
 
 ---
 
@@ -62,7 +62,7 @@ Default firewall rules include:
 - allow RDP
 - allow internal traffic
 
-![Firewall Rules](images/gc3_2.png)
+![Firewall Rules](gc3_2.png)
 
 ---
 
@@ -77,7 +77,7 @@ Subnet mode: Automatic
 
 Auto mode automatically creates subnets in every region.
 
-![Create VPC](images/gc3_4.png)
+![Create VPC](gc3_4.png)
 
 ---
 
@@ -85,7 +85,7 @@ Auto mode automatically creates subnets in every region.
 
 After creation, the network appears with multiple regional subnets.
 
-![VPC Created](images/gc3_5.png)
+![VPC Created](gc3_5.png)
 
 ---
 
@@ -117,7 +117,7 @@ Networking tag used:
 iap-gce
 ```
 
-![Create VM](images/gc3_3.png)
+![Create VM](gc3_3.png)
 
 ---
 
@@ -125,7 +125,7 @@ iap-gce
 
 Two instances are created in different regions.
 
-![VM Instances](images/gc3_7.png)
+![VM Instances](gc3_7.png)
 
 ---
 
@@ -149,7 +149,7 @@ ping -c 3 <internal-ip>
 
 Successful response confirms connectivity.
 
-![Ping Internal](images/gc3_8.png)
+![Ping Internal](gc3_8.png)
 
 ---
 
@@ -161,7 +161,7 @@ Test connectivity using the public IP.
 ping -c 3 <external-ip>
 ```
 
-![Ping External](images/gc3_9.png)
+![Ping External](gc3_9.png)
 
 ---
 
@@ -184,7 +184,7 @@ Firewall rule:
 managementnet-allow-icmp-ssh-rdp
 ```
 
-![Firewall Management](images/gc3_11.png)
+![Firewall Management](gc3_11.png)
 
 ---
 
@@ -218,7 +218,7 @@ Verify networks:
 gcloud compute networks list
 ```
 
-![Networks CLI](images/gc3_10.png)
+![Networks CLI](gc3_10.png)
 
 ---
 
@@ -241,7 +241,7 @@ Verify instances:
 gcloud compute instances list
 ```
 
-![VM List](images/gc3_12.png)
+![VM List](gc3_12.png)
 
 ---
 

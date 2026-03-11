@@ -14,7 +14,6 @@ This demonstrates secure access between Compute Engine and Cloud Storage.
 User uploads file through the website.
 
 ```
-
 User  
 ↓  
 Web Browser  
@@ -26,7 +25,6 @@ Compute Engine VM
 Service Account  
 ↓  
 Cloud Storage Bucket
-
 ```
 
 ---
@@ -48,13 +46,10 @@ Create a bucket to store uploaded files.
 Example bucket name:
 
 ```
-
 ali-bucket999
-
 ```
 
-
-![Bucket](images/gc4_1.png)
+![Bucket](gc4_1.png)
 
 ---
 
@@ -65,22 +60,18 @@ Create a Service Account for the VM.
 Service Account name:
 
 ```
-
 upload
-
 ```
 
 Grant role:
 
 ```
-
 Storage Object Admin
-
 ```
 
 This allows the VM to upload files to the bucket.
 
-![Service Account](images/gc4_2.png)
+![Service Account](gc4_2.png)
 
 ---
 
@@ -91,9 +82,7 @@ Allow HTTP traffic to access the web application.
 Firewall rule:
 
 ```
-
 allow-http
-
 ```
 
 Configuration:
@@ -102,7 +91,7 @@ Configuration:
 - Port: 8080
 - Direction: Ingress
 
-![Firewall Rule](images/gc4_3.png)
+![Firewall Rule](gc4_3.png)
 
 ---
 
@@ -112,16 +101,32 @@ Create a VM to host the web application.
 
 Example configuration:
 
-
+- Machine type: e2-medium
+- OS: Debian Linux
 - Service Account: upload
 
-![VM Service Account](images/gc4_4.png)
+![VM Service Account](gc4_4.png)
 
 ---
 
-# Step 5 – Install Required Packages
+# Step 5 – Connect to VM (SSH)
 
-SSH into the VM and install Python dependencies.
+Connect to the VM using **SSH-in-browser**.
+
+![SSH](gc4_5.png)
+
+---
+
+# Step 6 – Prepare the Environment
+
+Update the system and install Python and pip.
+
+```bash
+sudo apt update
+sudo apt install python3 python3-pip -y
+```
+
+Install the required Python packages:
 
 ```bash
 pip3 install flask google-cloud-storage requests==2.31.0 google-auth==2.29.0 --break-system-packages
@@ -129,7 +134,7 @@ pip3 install flask google-cloud-storage requests==2.31.0 google-auth==2.29.0 --b
 
 ---
 
-# Step 6 – Create Flask Application
+# Step 7 – Create Flask Application
 
 Create the web application file.
 
@@ -137,7 +142,7 @@ Create the web application file.
 nano app.py
 ```
 
-Example Flask application:
+Paste the following code:
 
 ```python
 from flask import Flask, request
@@ -174,7 +179,7 @@ app.run(host='0.0.0.0', port=8080)
 
 ---
 
-# Step 7 – Run the Web Application
+# Step 8 – Run the Web Application
 
 Run the Flask server:
 
@@ -188,25 +193,29 @@ Output:
 Running on http://0.0.0.0:8080
 ```
 
+![Running Flask](gc4_6.png)
+
 ---
 
-# Step 8 – Access the Web Application
+# Step 9 – Access the Web Application
 
-Open the VM external IP:
+Open the VM external IP in the browser:
 
-
+```
+http://VM_EXTERNAL_IP:8080
+```
 
 Upload a file using the web interface.
 
-![Upload Page](images/gc4_5.png)
+![Upload Page](gc4_7.png)
 
 ---
 
-# Step 9 – Verify File Upload
+# Step 10 – Verify File Upload
 
-After uploading the file, it should appear in the Cloud Storage bucket.
+After uploading the file, verify that it appears inside the Cloud Storage bucket.
 
-![Bucket Result](images/gc4_6.png)
+![Bucket Result](gc4_8.png)
 
 ---
 

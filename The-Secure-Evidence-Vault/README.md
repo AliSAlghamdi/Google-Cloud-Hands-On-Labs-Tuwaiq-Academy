@@ -404,14 +404,4 @@ It covered:
 - selective sharing
 - temporary secure access
 
-Overall, this was a strong hands-on exercise for understanding how Google Cloud security and storage services work together in a practical and realistic scenario.<img width="1920" height="1080" alt="gc5_11" src="https://github.com/user-attachments/assets/7ef42f4c-36c7-457d-a469-e98e18fe4ffc" />
-<img width="1920" height="1080" alt="gc5_10" src="https://github.com/user-attachments/assets/87bc4b1a-e5a0-4fa1-b72b-93fe58db47cb" />
-<img width="1920" height="1080" alt="gc5_9" src="https://github.com/user-attachments/assets/b02edf37-749c-4cf6-85ed-9c70ac4da5b1" />
-<img width="1920" height="1080" alt="gc5_8" src="https://github.com/user-attachments/assets/1da30fbc-9548-48cd-9b36-50ff381a3062" />
-<img width="1920" height="1080" alt="gc5_7" src="https://github.com/user-attachments/assets/0728c85f-d032-4f35-ba0d-b2babeae4794" />
-<img width="1920" height="1080" alt="gc5_6" src="https://github.com/user-attachments/assets/6101edc5-9ad5-42a0-afcb-5ca08a48039d" />
-<img width="1920" height="1080" alt="gc5_5" src="https://github.com/user-attachments/assets/bedda314-6d73-4ede-ba39-0f91e5436675" />
-<img width="1920" height="1080" alt="gc5_4" src="https://github.com/user-attachments/assets/84b15a29-4d52-48bd-8ccf-ecbcf6781928" />
-<img width="1920" height="1080" alt="gc5_3" src="https://github.com/user-attachments/assets/cd5dbfbd-deb4-45c0-84ab-ebc0312063ab" />
-<img width="1920" height="1080" alt="gc5_2" src="https://github.com/user-attachments/assets/2af41992-7811-4c97-94d5-ee83e5f84185" />
-<img width="1920" height="1080" alt="gc5_1" src="https://github.com/user-attachments/assets/225c1e91-8ef5-4c6a-92ac-672fa9dd012e" />
+Overall, this was a strong hands-on exercise for understanding how Google Cloud security and storage services work together in a practical and realistic scenario.
